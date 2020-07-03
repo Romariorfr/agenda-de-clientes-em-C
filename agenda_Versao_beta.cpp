@@ -4,8 +4,8 @@
 #include<stdbool.h>
 
     //variaveis globais
-    const int limit_register = 1;   //limite de cadastros
-    int user_code = 0; 
+    const int limit_register = 5;   //limite de cadastros
+    int user_code = 0; //codigo do usuario
 	
     
     // estrutura de registro de clientes
@@ -13,6 +13,7 @@
 		char Name[50];
 		char Tell[20];
 		char Email[50];
+		int code;
 	};
      
 	struct registerClient reg;
@@ -22,8 +23,8 @@
 //imprime o titulo e menu do programa
 void menuApplication(){
 	printf("--------------- AGENDA - VERSAO BETA ----------------\n\n");
-	printf("1 - Didite 1 para inserir novo cadastro:\n");
-	printf("2 - Didite 2 para mostrar clientes cadastrados:\n");
+	printf("1 - Digite 1 para inserir novo cadastro:\n");
+	printf("2 - Digite 2 para mostrar clientes cadastrados:\n");
 	printf("0 - Digite 0 para encerrar:\n\n");
 }
 
@@ -50,6 +51,8 @@ void getDataClient(){
 	gets(reg.Email);
 	printf("\n");
 	
+	reg.code = user_code; 
+	
 }
 
 //limpa a tela
@@ -63,66 +66,78 @@ void saveApointment(registerClient r){
 	user_code++;
 }
 
+//verifica se ha espaco na agenda
 int checkLimit(){
 	bool check = false;
 	if(user_code < limit_register){
-		printf("tem vaga");
 		check = true;
-		system("PAUSE");
 	}
 	else{
-		printf("agenda lotada");
+		printf("agenda lotada\n");
+		system("PAUSE");
 		check = false;
 	}
 	return check;
 	
 }
 
-
+//exibe a lista de clientes cadastrados na tela
+void show_list_client(){
+	int i = 0;
+	while( i < user_code){
+		printf("***Codigo do cliente %d\n",dateBook[i].code);
+		printf("%s\n",dateBook[i].Name);
+	    printf("%s\n",dateBook[i].Email);
+	    printf("%s\n\n",dateBook[i].Tell);
+	    i++;
+	}
+}
 
 //funcao principal
 int main(){
 	
-	//exibe o titulo da aplicacao
-	menuApplication();
-	
-	
-	switch (menuOptions()){
+	while (true){
+		
+		cleanScreen();
+		menuApplication();
+		
+			switch (menuOptions()){
 		case 1:
 			if(checkLimit() == true){
 				cleanScreen(); // limpa a tela
 			    getDataClient();  //solicita os dados do cliente
-			    saveApointment(reg); //salva os registro na agenda na posicao
+			    saveApointment(reg); //salva os registro na agenda
 			}
 			
 		break;
 		
 		case 2:
 			if(user_code != 0){
-				printf("%s ",dateBook[0].Name);
-	            printf("%s ",dateBook[0].Email);
-	            printf("%s ",dateBook[0].Tell);
+				cleanScreen(); //limpa a tela
+			    show_list_client(); //mostra a lista de clientes cadastrados
+	            system("PAUSE");
 			}
 			else{
 				cleanScreen();
-				printf("Agenda Vazia!");
+				printf("Agenda Vazia!\n");
+				system("PAUSE");
 			}
 			
 		break;
 		
 		case 0:
 			
-		    exit(0);
+		    exit(0); //finaliza o programa
 		    
 		break;
 		
 		default :
 			
-		     printf("erro;");
+		     printf("Opcao invalida!\n");
+		     system("PAUSE");
 				
-	} 
-
-	
+	        }
+	}
 }
 
 
